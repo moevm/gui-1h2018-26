@@ -48,87 +48,83 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.9
-import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.2
-import "../Models"
-import "../Delegates"
-import "../Models/JSONListModel/CryptoApi.js" as Utils
+import QtQuick 2.0
+import QtQuick.Layouts 1.1
+import "."
 
 Rectangle {
     id: root
-    anchors.top: parent.top
-    anchors.bottom: parent.bottom
-    color: "white"
-    property string currentCoinName: ""
-    property string targetCoinName: ""
-    RowLayout {
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.topMargin: 10
-        anchors.leftMargin: 10
-        id: rofl;
-        spacing: 28
+    color: "transparent"
+
+    property var stock: null
+
+    GridLayout {
+        id: stockInfoLayout
+        anchors.fill: parent
+        columns: 2
+        rows: 3
+        rowSpacing: 4
 
         Text {
-            id: timeSpan
+            id: stockIdText
             color: "#000000"
-            font.pointSize: 14
-            //font.weight: Font.Bold
-            verticalAlignment: Text.AlignVCenter
-            maximumLineCount: 1
-            text: "Target currency:"
-            wrapMode: Text.Wrap
-            //anchors.margins: 10
+            font.family: Settings.fontFamily
+            font.pointSize: 28
+            font.weight: Font.DemiBold
+            text: root.stock.stockId
+            Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
+            Layout.leftMargin: 10
         }
 
-        ComboBox {
-            id: selector
-            model: ["USD", "ETH", "RUB", "BTC", "EUR", "AUD", "BRL", "CAD", "CHF", "GBP",
-                "HKD"]
-            onCurrentTextChanged: {
-                stockModel.targetCoin = selector.currentText;
-                stockModel.loadData();
-                root.targetCoinName = stockModel.targetCoin;
-            }
-        }
-    }
-    ListView {
-        id: view
-        anchors.top: rofl.bottom;
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        anchors.topMargin: 10
-        anchors.leftMargin: 10
-        clip: true
-        keyNavigationWraps: true
-        highlightMoveDuration: 0
-        focus: true
-        snapMode: ListView.NoSnap
-        model: StockListModel {
-            id: stockModel;
-        }
-        currentIndex: -1 // Don't pre-select any item
-        cacheBuffer: 1000;
-        onCurrentIndexChanged: {
-            if (currentItem) {
-                root.targetCoinName = model.targetCoin;
-                root.currentCoinName = model.get(currentIndex).Name;
-            }
+        Text {
+            id: price
+            color: "#6d6d6d"
+            font.family: Settings.fontFamily
+            font.pointSize: 28
+            font.weight: Font.DemiBold
+            text: parseFloat(root.stock.stockPrice).toFixed(2);
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
+            Layout.leftMargin: 5
         }
 
-        delegate: StockListDelegate {
-
+        Text {
+            id: stockNameText
+            color: "#0c0c0c"
+            font.family: Settings.fontFamily
+            font.pointSize: 16
+            elide: Text.ElideRight
+            maximumLineCount: 3
+            wrapMode: Text.WordWrap
+            text: root.stock.stockName
+            Layout.leftMargin: 10
+            Layout.columnSpan: 2
+            Layout.alignment: Qt.AlignLeft
         }
 
-        highlight: Rectangle {
-            width: view.width
-            color: "#eeeeee"
+
+        Text {
+            id: priceChange
+            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
+            Layout.leftMargin: 10
+            color: root.stock.stockPriceChanged < 0 ? "#d40000" : "#328930"
+            font.family: Settings.fontFamily
+            font.pointSize: 18
+            text: parseFloat(root.stock.stockPriceChanged).toFixed(2);
         }
 
-        Component.onCompleted: {
-            model.loadData();
+        Text {
+            id: priceChangePercentage
+            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
+            color: root.stock.stockPriceChanged < 0 ? "#d40000" : "#328930"
+            font.family: Settings.fontFamily
+            font.pointSize: 18
+            font.weight: Font.DemiBold
+            Layout.fillWidth: true
+            text: "(" +
+                  parseFloat(root.stock.stockPriceChanged /
+                             (root.stock.stockPrice - root.stock.stockPriceChanged) * 100.0).toFixed(2) +
+                  "%)"
         }
     }
 }

@@ -47,88 +47,70 @@
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
-
 import QtQuick 2.9
-import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.2
-import "../Models"
-import "../Delegates"
-import "../Models/JSONListModel/CryptoApi.js" as Utils
+import "./JSONListModel/CryptoApi.js" as Utils
+ListModel {
+    id: stocks
+    property var coinsList
+    property string targetCoin: "USD"
 
-Rectangle {
-    id: root
-    anchors.top: parent.top
-    anchors.bottom: parent.bottom
-    color: "white"
-    property string currentCoinName: ""
-    property string targetCoinName: ""
-    RowLayout {
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.topMargin: 10
-        anchors.leftMargin: 10
-        id: rofl;
-        spacing: 28
-
-        Text {
-            id: timeSpan
-            color: "#000000"
-            font.pointSize: 14
-            //font.weight: Font.Bold
-            verticalAlignment: Text.AlignVCenter
-            maximumLineCount: 1
-            text: "Target currency:"
-            wrapMode: Text.Wrap
-            //anchors.margins: 10
-        }
-
-        ComboBox {
-            id: selector
-            model: ["USD", "ETH", "RUB", "BTC", "EUR", "AUD", "BRL", "CAD", "CHF", "GBP",
-                "HKD"]
-            onCurrentTextChanged: {
-                stockModel.targetCoin = selector.currentText;
-                stockModel.loadData();
-                root.targetCoinName = stockModel.targetCoin;
-            }
-        }
+    function loadData(){
+        Utils.getAllCoins(acceptData);
     }
-    ListView {
-        id: view
-        anchors.top: rofl.bottom;
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        anchors.topMargin: 10
-        anchors.leftMargin: 10
-        clip: true
-        keyNavigationWraps: true
-        highlightMoveDuration: 0
-        focus: true
-        snapMode: ListView.NoSnap
-        model: StockListModel {
-            id: stockModel;
-        }
-        currentIndex: -1 // Don't pre-select any item
-        cacheBuffer: 1000;
-        onCurrentIndexChanged: {
-            if (currentItem) {
-                root.targetCoinName = model.targetCoin;
-                root.currentCoinName = model.get(currentIndex).Name;
-            }
+
+    function acceptData(response){
+        var callbackObjectResponse = JSON.parse(response);
+        var baseUrl = callbackObjectResponse.BaseImageUrl;
+        var coinsObject = callbackObjectResponse.Data;
+        for (var index in coinsObject) {
+            if(coinsObject[index] !== undefined)
+                coinsObject[index].ImageUrl = baseUrl + coinsObject[index].ImageUrl;
         }
 
-        delegate: StockListDelegate {
+        //coinsObject.sort(compare);
+        var coins = [];
+        for (index in coinsObject)
+            coins.push(coinsObject[index]);
+        coins.sort(compare);
+        coins = coins.slice(0, 30);
+        coinsList = coins;
+        var baseCoinsParam = transformCurrencyToParam(coins);
+        Utils.getFromBaseToTargetFullInfo(baseCoinsParam, targetCoin, acceptConvertationData);
+    }
 
+    function acceptConvertationData(response){
+        stocks.clear();
+        var responseObject = JSON.parse(response);
+        for (var index in coinsList){
+            var coinName = coinsList[index].Name;
+            coinsList[index].Dispay = responseObject.DISPLAY[coinName][targetCoin];
+            coinsList[index].Raw = responseObject.RAW[coinName][targetCoin];
         }
+        var coinz = coinsList;
+        for (index in coinsList)
+            stocks.append(coinsList[index]);
+    }
 
-        highlight: Rectangle {
-            width: view.width
-            color: "#eeeeee"
-        }
+    function compare(a, b) {
+      var first = parseInt(a.SortOrder);
+        var second = parseInt(b.SortOrder);
+      if (first < second) {
+        return -1;
+      }
 
-        Component.onCompleted: {
-            model.loadData();
-        }
+      if (first > second) {
+        return 1;
+      }
+
+      return 0;
+    }
+
+    function transformCurrencyToParam(currencyObjects){
+        var params = [];
+        for (var index in currencyObjects)
+            params.push(currencyObjects[index].Name);
+        var requestParam = params.join(',');
+        return requestParam;
     }
 }
+

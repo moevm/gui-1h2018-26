@@ -49,86 +49,37 @@
 ****************************************************************************/
 
 import QtQuick 2.9
-import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.2
 import "../Models"
 import "../Delegates"
 import "../Models/JSONListModel/CryptoApi.js" as Utils
 
-Rectangle {
-    id: root
-    anchors.top: parent.top
-    anchors.bottom: parent.bottom
-    color: "white"
-    property string currentCoinName: ""
+ListView {
+    property string currentCategory: ""
     property string targetCoinName: ""
-    RowLayout {
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.topMargin: 10
-        anchors.leftMargin: 10
-        id: rofl;
-        spacing: 28
+    id: view
+    //anchors.fill: parent
 
-        Text {
-            id: timeSpan
-            color: "#000000"
-            font.pointSize: 14
-            //font.weight: Font.Bold
-            verticalAlignment: Text.AlignVCenter
-            maximumLineCount: 1
-            text: "Target currency:"
-            wrapMode: Text.Wrap
-            //anchors.margins: 10
-        }
-
-        ComboBox {
-            id: selector
-            model: ["USD", "ETH", "RUB", "BTC", "EUR", "AUD", "BRL", "CAD", "CHF", "GBP",
-                "HKD"]
-            onCurrentTextChanged: {
-                stockModel.targetCoin = selector.currentText;
-                stockModel.loadData();
-                root.targetCoinName = stockModel.targetCoin;
-            }
+    clip: true
+    keyNavigationWraps: true
+    highlightMoveDuration: 0
+    focus: true
+    snapMode: ListView.NoSnap
+    currentIndex: -1 // Don't pre-select any item
+    cacheBuffer: 1000;
+    onCurrentIndexChanged: {
+        if (currentItem) {
+            view.currentCategory = model.get(currentIndex).categoryName;
         }
     }
-    ListView {
-        id: view
-        anchors.top: rofl.bottom;
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        anchors.topMargin: 10
-        anchors.leftMargin: 10
-        clip: true
-        keyNavigationWraps: true
-        highlightMoveDuration: 0
-        focus: true
-        snapMode: ListView.NoSnap
-        model: StockListModel {
-            id: stockModel;
-        }
-        currentIndex: -1 // Don't pre-select any item
-        cacheBuffer: 1000;
-        onCurrentIndexChanged: {
-            if (currentItem) {
-                root.targetCoinName = model.targetCoin;
-                root.currentCoinName = model.get(currentIndex).Name;
-            }
-        }
 
-        delegate: StockListDelegate {
+    delegate: RSSCategoriesListDelegate { }
 
-        }
+    highlight: Rectangle {
+        width: view.width
+        color: "#eeeeee"
+    }
 
-        highlight: Rectangle {
-            width: view.width
-            color: "#eeeeee"
-        }
-
-        Component.onCompleted: {
-            model.loadData();
-        }
+    Component.onCompleted: {
+        model.loadData();
     }
 }

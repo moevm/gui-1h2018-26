@@ -49,86 +49,93 @@
 ****************************************************************************/
 
 import QtQuick 2.9
-import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.2
-import "../Models"
-import "../Delegates"
-import "../Models/JSONListModel/CryptoApi.js" as Utils
+import QtCharts 2.1
 
-Rectangle {
+import "."
+
+Item {
     id: root
-    anchors.top: parent.top
-    anchors.bottom: parent.bottom
-    color: "white"
-    property string currentCoinName: ""
-    property string targetCoinName: ""
-    RowLayout {
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.topMargin: 10
-        anchors.leftMargin: 10
-        id: rofl;
-        spacing: 28
+    //![1]
+    ChartView {
+        title: "Please select any currency"
+        anchors.fill: parent
+        legend.visible: false
+        antialiasing: true
+        id: chart
 
-        Text {
-            id: timeSpan
-            color: "#000000"
-            font.pointSize: 14
-            //font.weight: Font.Bold
-            verticalAlignment: Text.AlignVCenter
-            maximumLineCount: 1
-            text: "Target currency:"
-            wrapMode: Text.Wrap
-            //anchors.margins: 10
-        }
+        axes: [
+            DateTimeAxis {
+                id: xAxis
+                //format: "yyyy MMM"
+                tickCount: 5
+            },
 
-        ComboBox {
-            id: selector
-            model: ["USD", "ETH", "RUB", "BTC", "EUR", "AUD", "BRL", "CAD", "CHF", "GBP",
-                "HKD"]
-            onCurrentTextChanged: {
-                stockModel.targetCoin = selector.currentText;
-                stockModel.loadData();
-                root.targetCoinName = stockModel.targetCoin;
+            ValueAxis {
+                id: yAxis
+                //min: 0
+                //max: 150
             }
-        }
+        ]
     }
-    ListView {
-        id: view
-        anchors.top: rofl.bottom;
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        anchors.topMargin: 10
-        anchors.leftMargin: 10
-        clip: true
-        keyNavigationWraps: true
-        highlightMoveDuration: 0
-        focus: true
-        snapMode: ListView.NoSnap
-        model: StockListModel {
-            id: stockModel;
-        }
-        currentIndex: -1 // Don't pre-select any item
-        cacheBuffer: 1000;
-        onCurrentIndexChanged: {
-            if (currentItem) {
-                root.targetCoinName = model.targetCoin;
-                root.currentCoinName = model.get(currentIndex).Name;
-            }
-        }
-
-        delegate: StockListDelegate {
-
-        }
-
-        highlight: Rectangle {
-            width: view.width
-            color: "#eeeeee"
-        }
-
-        Component.onCompleted: {
-            model.loadData();
-        }
+    // DateTimeAxis is based on QDateTimes so we must convert our JavaScript dates to
+    // milliseconds since epoch to make them match the DateTimeAxis values
+    function toMsecsSinceEpoch(date) {
+        var msecs = date.getTime();
+        return msecs;
     }
+    //![1]
+
+    function findMin(elements, prop, max){
+        var min = max;
+        for(var index in elements)
+        {
+            if(elements[index][prop] < min)
+                min = elements[index][prop];
+        }
+        return min;
+    }
+
+    function findMax(elements, prop){
+        var max = -1;
+        for(var index in elements)
+        {
+            if(elements[index][prop] > max)
+                max = elements[index][prop];
+        }
+        return max;
+    }
+
+    function fromMillesecondsToDate(milleseconds){
+        return new Date(milleseconds);
+    }
+
+    function setAxesFormat(title){
+        if(title.search("1 D") != -1 || title.search("6 H") != -1)
+            return "hh:MM"
+        if(title.search("7 D") != -1 || title.search("30 D") != -1)
+            return "MMM dd";
+        return "yyyy MMM";
+    }
+
+    function updateStock(elements, title) {
+        chart.removeAllSeries();
+        xAxis.tickCount = 5;
+        yAxis.max = findMax(elements, "open");
+        xAxis.max = fromMillesecondsToDate(findMax(elements, "time") * 1000);
+        yAxis.min = findMin(elements, "open", yAxis.max);
+        xAxis.min = fromMillesecondsToDate( findMin(elements, "time", xAxis.max) * 1000);
+        xAxis.format = setAxesFormat(title);
+        var series = chart.createSeries(ChartView.SeriesTypeLine, "line", xAxis, yAxis);
+        series.pointsVisible = true;
+        series.color = Qt.rgba(Math.random(),Math.random(),Math.random(),1);
+        for(var index in elements)
+        {
+            var date = elements[index]["time"] * 1000;
+            var open = elements[index]["open"];
+            series.append(date, open);
+        }
+        series.pointsVisible = true;
+        chart.title = title;
+    }
+
 }
