@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2017 The Qt Company Ltd.
+** Copyright (C) 2012 Research In Motion.
 ** Contact: https://www.qt.io/licensing/
 **
 ** This file is part of the examples of the Qt Toolkit.
@@ -48,87 +48,39 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.9
-import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.2
-import "../Models"
-import "../Delegates"
-import "../Models/JSONListModel/CryptoApi.js" as Utils
+import QtQuick 2.0
 
-Rectangle {
-    id: root
-    anchors.top: parent.top
-    anchors.bottom: parent.bottom
-    color: "white"
-    property string currentCoinName: ""
-    property string targetCoinName: ""
-    RowLayout {
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.topMargin: 10
-        anchors.leftMargin: 10
-        id: rofl;
-        spacing: 28
-
-        Text {
-            id: timeSpan
-            color: "#000000"
-            font.pointSize: 14
-            //font.weight: Font.Bold
-            verticalAlignment: Text.AlignVCenter
-            maximumLineCount: 1
-            text: "Target currency:"
-            wrapMode: Text.Wrap
-            //anchors.margins: 10
-        }
-
-        ComboBox {
-            id: selector
-            model: ["USD", "ETH", "RUB", "BTC", "EUR", "AUD", "BRL", "CAD", "CHF", "GBP",
-                "HKD"]
-            onCurrentTextChanged: {
-                stockModel.targetCoin = selector.currentText;
-                stockModel.loadData();
-                root.targetCoinName = stockModel.targetCoin;
-            }
+Item {
+    id: button
+    property bool buttonEnabled: true
+    width: 30
+    height: 30
+    x: 5
+    MouseArea {
+        id: mouse
+        anchors.fill: parent
+        onClicked: {
+            if (buttonEnabled)
+                buttonEnabled = false;
+            else
+                buttonEnabled = true;
         }
     }
-    ListView {
-        id: view
-        anchors.top: rofl.bottom;
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        anchors.topMargin: 10
-        anchors.leftMargin: 10
-        clip: true
-        keyNavigationWraps: true
-        highlightMoveDuration: 0
-        focus: true
-        snapMode: ListView.NoSnap
-        model: StockListModel {
-            id: stockModel;
-        }
-        currentIndex: -1 // Don't pre-select any item
-        cacheBuffer: 1000;
-        onCurrentIndexChanged: {
-            if (currentItem) {
-                root.targetCoinName = model.targetCoin;
-                root.currentCoinName = model.get(currentIndex).Name;
-            }
-        }
-
-        delegate: StockListDelegate {
-
-        }
-
-        highlight: Rectangle {
-            width: view.width
-            color: "#eeeeee"
-        }
-
-        Component.onCompleted: {
-            model.loadData();
+    Rectangle {
+        id: checkbox
+        width: 30
+        height: 30
+        border.color: "#999999"
+        border.width: 1
+        antialiasing: true
+        radius: 2
+        color: "transparent"
+        Rectangle {
+            anchors.fill: parent
+            anchors.margins: 5
+            antialiasing: true
+            radius: 1
+            color: mouse.pressed || buttonEnabled ? "#999999" : "transparent"
         }
     }
 }

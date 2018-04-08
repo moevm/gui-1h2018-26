@@ -1,4 +1,4 @@
-QT += quick
+QT += quick widgets
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
@@ -12,9 +12,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-SOURCES += main.cpp
+SOURCES += \
+    main.cpp
 
-RESOURCES += qml.qrc
+RESOURCES += \
+    qml.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -26,3 +28,30 @@ QML_DESIGNER_IMPORT_PATH =
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES += \
+    About.qml \
+    Converter.qml \
+    News.qml \
+    main.qml \
+    Rates.qml \
+    Delegates/StockListDelegate.qml \
+    Views/StockListView.qml \
+    Models/JSONListModel/CryptoApi.js \
+    Models/JSONListModel/jsonpath.js \
+    Models/CryptoApi.js \
+    Models/jsonpath.js \
+    Models/JSONListModel/JSONListModel.qmlproject \
+    Models/JSONListModel.qmlproject \
+    Models/JSONListModel/example.qml \
+    Models/JSONListModel/JSONListModel.qml \
+    Models/example.qml \
+    Models/StockListModel.qml \
+    StockChart.qml \
+    StockInfo.qml \
+    StockModel.qml \
+    StockSettingsPanel.qml \
+    StockView.qml \
+    CheckBox.qml \
+    Button.qml \
+    Views/ExchangesView.qml
