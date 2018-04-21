@@ -117,7 +117,6 @@ Item {
         return "yyyy MMM";
     }
 
-<<<<<<< HEAD
     function computeMovingAverage(elements){
         var series = chart.createSeries(ChartView.SeriesTypeLine, "Moving Average", xAxis, yAxis);
         series.pointsVisible = false;
@@ -144,25 +143,15 @@ Item {
     function updateStock(elements, title) {
         chart.removeAllSeries();
         computeMovingAverage(elements);
-=======
-    function updateStock(elements, title) {
-        chart.removeAllSeries();
->>>>>>> e40046b4513f4d527fbf662438cfbe87fcde1a6a
         xAxis.tickCount = 5;
         yAxis.max = findMax(elements, "open");
         xAxis.max = fromMillesecondsToDate(findMax(elements, "time") * 1000);
         yAxis.min = findMin(elements, "open", yAxis.max);
         xAxis.min = fromMillesecondsToDate( findMin(elements, "time", xAxis.max) * 1000);
         xAxis.format = setAxesFormat(title);
-<<<<<<< HEAD
         var series = chart.createSeries(ChartView.SeriesTypeLine, "Stock", xAxis, yAxis);
         series.pointsVisible = true;
         series.color = Qt.rgba(0, 0, 1, 1);
-=======
-        var series = chart.createSeries(ChartView.SeriesTypeLine, "line", xAxis, yAxis);
-        series.pointsVisible = true;
-        series.color = Qt.rgba(Math.random(),Math.random(),Math.random(),1);
->>>>>>> e40046b4513f4d527fbf662438cfbe87fcde1a6a
         for(var index in elements)
         {
             var date = elements[index]["time"] * 1000;
