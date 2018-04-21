@@ -48,38 +48,60 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.9
-import "../Models"
-import "../Delegates"
-import "../Models/JSONListModel/CryptoApi.js" as Utils
+import QtQuick 2.0
+import QtQuick.Window 2.1
+import QtQuick.Layouts 1.1
 
-ListView {
-    property string currentCategory: ""
-    property string targetCoinName: ""
-    id: view
-    //anchors.fill: parent
+Rectangle {
+    id: root
+    color: "transparent"
+    property var stock: null
+    property var stocklist: null
+    signal settingsClicked
 
-    clip: true
-    keyNavigationWraps: true
-    highlightMoveDuration: 0
-    focus: true
-    snapMode: ListView.NoSnap
-    currentIndex: -1 // Don't pre-select any item
-    cacheBuffer: 1000;
-    onCurrentIndexChanged: {
-        if (currentItem) {
-            view.currentCategory = model.get(currentIndex).categoryName;
+    function update() {
+        chart.update()
+    }
+
+    Rectangle {
+        id: mainRect
+        color: "transparent"
+        anchors.fill: parent
+
+        GridLayout {
+            anchors.fill: parent
+            rows: 2
+            columns: Screen.primaryOrientation === Qt.PortraitOrientation ? 1 : 2
+
+            StockInfo {
+                id: stockInfo
+                Layout.alignment: Qt.AlignTop
+                Layout.preferredWidth: 400
+                Layout.preferredHeight: 160
+                stock: root.stock
+            }
+
+            StockChart {
+                id: chart
+                Layout.margins: 5
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                Layout.rowSpan: 2
+                stockModel: root.stock
+                settings: settingsPanel
+            }
+
+            StockSettingsPanel {
+                id: settingsPanel
+                Layout.alignment: Qt.AlignBottom
+                Layout.fillHeight: true
+                Layout.preferredWidth: 400
+                Layout.bottomMargin: 5
+                onDrawOpenPriceChanged: root.update()
+                onDrawClosePriceChanged: root.update();
+                onDrawHighPriceChanged: root.update();
+                onDrawLowPriceChanged: root.update();
+            }
         }
-    }
-
-    delegate: RSSCategoriesListDelegate { }
-
-    highlight: Rectangle {
-        width: view.width
-        color: "#eeeeee"
-    }
-
-    Component.onCompleted: {
-        model.loadData();
     }
 }

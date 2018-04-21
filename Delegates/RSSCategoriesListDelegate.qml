@@ -48,38 +48,44 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.9
-import "../Models"
-import "../Delegates"
-import "../Models/JSONListModel/CryptoApi.js" as Utils
+import QtQuick 2.5
+import QtQuick.Layouts 1.1
+import "."
 
-ListView {
-    property string currentCategory: ""
-    property string targetCoinName: ""
-    id: view
-    //anchors.fill: parent
+Rectangle {
+    height: 40
+    width: 160
+    color: "transparent"
 
-    clip: true
-    keyNavigationWraps: true
-    highlightMoveDuration: 0
-    focus: true
-    snapMode: ListView.NoSnap
-    currentIndex: -1 // Don't pre-select any item
-    cacheBuffer: 1000;
-    onCurrentIndexChanged: {
-        if (currentItem) {
-            view.currentCategory = model.get(currentIndex).categoryName;
+    MouseArea {
+        anchors.fill: parent;
+        onClicked: {
+            view.currentIndex = index;
+        }
+    }
+    ColumnLayout {
+        Text {
+            id: coinNameText
+            Layout.alignment: Qt.AlignCenter
+            Layout.margins: 10
+            Layout.rowSpan: 2
+            Layout.maximumWidth: 150
+            color: "#000000"
+            //font.family: Settings.fontFamily
+            font.pointSize: 14
+            //font.weight: Font.Bold
+            verticalAlignment: Text.AlignVCenter
+            text: categoryName
+            wrapMode: Text.Wrap
         }
     }
 
-    delegate: RSSCategoriesListDelegate { }
-
-    highlight: Rectangle {
-        width: view.width
-        color: "#eeeeee"
-    }
-
-    Component.onCompleted: {
-        model.loadData();
+    Rectangle {
+        id: endingLine
+        anchors.top: parent.bottom
+        height: 1
+        width: parent.width
+        color: "#d7d7d7"
     }
 }
+

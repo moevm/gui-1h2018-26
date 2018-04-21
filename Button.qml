@@ -48,38 +48,27 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.9
-import "../Models"
-import "../Delegates"
-import "../Models/JSONListModel/CryptoApi.js" as Utils
+import QtQuick 2.0
+import "."
 
-ListView {
-    property string currentCategory: ""
-    property string targetCoinName: ""
-    id: view
-    //anchors.fill: parent
-
-    clip: true
-    keyNavigationWraps: true
-    highlightMoveDuration: 0
-    focus: true
-    snapMode: ListView.NoSnap
-    currentIndex: -1 // Don't pre-select any item
-    cacheBuffer: 1000;
-    onCurrentIndexChanged: {
-        if (currentItem) {
-            view.currentCategory = model.get(currentIndex).categoryName;
-        }
+Rectangle {
+    id: button
+    signal clicked
+    property alias text: txt.text
+    property bool buttonEnabled: false
+    width: Math.max(64, txt.width + 16)
+    height: 32
+    color: "transparent"
+    MouseArea {
+        anchors.fill: parent
+        onClicked: button.clicked()
     }
-
-    delegate: RSSCategoriesListDelegate { }
-
-    highlight: Rectangle {
-        width: view.width
-        color: "#eeeeee"
-    }
-
-    Component.onCompleted: {
-        model.loadData();
+    Text {
+        anchors.centerIn: parent
+        font.family: Settings.fontFamily
+        font.pointSize: 19
+        font.weight: Font.DemiBold
+        color: button.buttonEnabled ? "#000000" : "#14aaff"
+        id: txt
     }
 }

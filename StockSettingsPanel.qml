@@ -48,94 +48,117 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.5
+import QtQuick 2.0
 import QtQuick.Layouts 1.1
 import "."
 
 Rectangle {
-    height: 100
-    width: parent.width
+    id: root
     color: "transparent"
 
-    MouseArea {
-        anchors.fill: parent;
-        onClicked: {
-                view.currentIndex = index;
-        }
-    }
+    property bool drawOpenPrice: false
+    property bool drawClosePrice: false
+    property bool drawHighPrice: true
+    property bool drawLowPrice: true
+
+    property string openColor: "#face20"
+    property string closeColor: "#14aaff"
+    property string highColor: "#80c342"
+    property string lowColor: "#f30000"
+    property string volumeColor: "#14aaff"
 
     GridLayout {
-        id: stockGrid
+        id: settingsGrid
+        rows: 5
         columns: 3
-        rows: 2
-        width: parent.width
-        height: parent.height
+        rowSpacing: 4
+        anchors.fill: parent
 
-        Image {
-            id: coinImage
-            fillMode: Image.PreserveAspectFit
-            height: 90
-            Layout.rowSpan: 2
-            sourceSize.height: 70
-            sourceSize.width: 70
-            Layout.margins: 10
-            width: 70
-            source: ImageUrl
+        Item {
+            Layout.fillHeight: true
+            Layout.columnSpan: 3
         }
 
         Text {
-            id: coinNameText
-            //Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
-            Layout.margins: 10
-            Layout.rowSpan: 2
-            Layout.maximumWidth: 150
+            id: openText
             color: "#000000"
-            //font.family: Settings.fontFamily
-            font.pointSize: 14
-            //font.weight: Font.Bold
-            verticalAlignment: Text.AlignVCenter
-            text: FullName
-            wrapMode: Text.Wrap
+            font.family: Settings.fontFamily
+            font.pointSize: 19
+            text: "Open"
+            Layout.leftMargin: 10
+        }
+        Rectangle {
+            Layout.preferredHeight: 4
+            Layout.preferredWidth: 114
+            color: openColor
+        }
+        CheckBox {
+            id: openButton
+            buttonEnabled: false
+            onButtonEnabledChanged: drawOpenPrice = buttonEnabled
+            Layout.rightMargin: 10
         }
 
         Text {
-            id: priceText
-            Layout.alignment: Qt.AlignRight
-            Layout.margins: 10
+            id: closeText
+            Layout.leftMargin: 10
             color: "#000000"
-            //font.family: Settings.fontFamily
-            font.pointSize: 14
-            //font.weight: Font.Bold
-            verticalAlignment: Text.AlignVCenter
-            text: Dispay.PRICE
+            font.family: Settings.fontFamily
+            font.pointSize: 19
+            text: "Close"
+        }
+        Rectangle {
+            Layout.preferredHeight: 4
+            Layout.preferredWidth: 114
+            color: closeColor
+        }
+        CheckBox {
+            id: closeButton
+            buttonEnabled: false
+            onButtonEnabledChanged: drawClosePrice = buttonEnabled
+            Layout.rightMargin: 10
         }
 
         Text {
-            id: valueChangeText
-            Layout.alignment: Qt.AlignRight
-            Layout.margins: 10
+            id: highText
+            Layout.leftMargin: 10
             color: "#000000"
-            //font.family: Settings.fontFamily
-            font.pointSize: 14
-            //font.weight: Font.Bold
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignRight
-            text: Dispay.CHANGEDAY
-            onTextChanged: {
-                if (parseFloat(Raw.CHANGEDAY) >= 0.0)
-                    color = "#328930";
-                else
-                    color = "#d40000";
-            }
+            font.family: Settings.fontFamily
+            font.pointSize: 19
+            text: "High"
         }
-    }
+        Rectangle {
+            Layout.preferredHeight: 4
+            Layout.preferredWidth: 114
+            color: highColor
+        }
 
-    Rectangle {
-        id: endingLine
-        anchors.top: stockGrid.bottom
-        height: 1
-        width: parent.width
-        color: "#d7d7d7"
+        CheckBox {
+            id: highButton
+            buttonEnabled: true
+            onButtonEnabledChanged: drawHighPrice = buttonEnabled
+            Layout.rightMargin: 10
+        }
+
+        Text {
+            id: lowText
+            Layout.leftMargin: 10
+            color: "#000000"
+            font.family: Settings.fontFamily
+            font.pointSize: 19
+            text: "Low"
+        }
+        Rectangle {
+            Layout.preferredHeight: 4
+            Layout.preferredWidth: 114
+            color: lowColor
+        }
+
+        CheckBox {
+            id: lowButton
+            buttonEnabled: true
+            onButtonEnabledChanged: drawLowPrice = buttonEnabled
+            Layout.rightMargin: 10
+        }
     }
 }
-

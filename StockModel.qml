@@ -48,38 +48,57 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.9
-import "../Models"
-import "../Delegates"
-import "../Models/JSONListModel/CryptoApi.js" as Utils
+import QtQuick 2.0
+import "./Models/JSONListModel/CryptoApi.js" as Utils
 
-ListView {
-    property string currentCategory: ""
+ListModel {
+    id: model
+    property string coinName: ""
+    property string stockName: ""
     property string targetCoinName: ""
-    id: view
-    //anchors.fill: parent
+    property string timeSpan: ""
+    property string title: ""
+    property var stocks: []
+    signal dataReady
 
-    clip: true
-    keyNavigationWraps: true
-    highlightMoveDuration: 0
-    focus: true
-    snapMode: ListView.NoSnap
-    currentIndex: -1 // Don't pre-select any item
-    cacheBuffer: 1000;
-    onCurrentIndexChanged: {
-        if (currentItem) {
-            view.currentCategory = model.get(currentIndex).categoryName;
+    function indexOf(date) {
+
+    }
+
+    function createStockPrice(r) {
+
+    }
+
+    function createStock(response) {
+        var rofl = JSON.parse(response);
+        if(rofl["Response"] == "Error")
+            return;
+        model.title = "Rates from " + model.coinName + " to " + model.targetCoinName + " for " + model.timeSpan;
+        //stocks.length = 0;
+        stocks = rofl["Data"];
+        model.dataReady();
+    }
+
+    function updateStock() {
+        switch(model.timeSpan){
+            case "6 H":
+                Utils.getCoinInfoByHours(model.coinName, model.targetCoinName, 6, createStock);
+                break;
+            case "1 D":
+                Utils.getCoinInfoByHours(model.coinName, model.targetCoinName, 24, createStock);
+                break;
+            case "7 D":
+                Utils.getCoinInfoByDays(model.coinName, model.targetCoinName, 7, createStock);
+                break;
+            case "30 D":
+                Utils.getCoinInfoByDays(model.coinName, model.targetCoinName, 30, createStock);
+                break;
+            case "6 M":
+                Utils.getCoinInfoByDays(model.coinName, model.targetCoinName, 180, createStock);
+                break;
+            case "1 Y":
+                Utils.getCoinInfoByDays(model.coinName, model.targetCoinName, 365, createStock);
+                break;
         }
-    }
-
-    delegate: RSSCategoriesListDelegate { }
-
-    highlight: Rectangle {
-        width: view.width
-        color: "#eeeeee"
-    }
-
-    Component.onCompleted: {
-        model.loadData();
     }
 }

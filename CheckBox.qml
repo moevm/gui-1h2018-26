@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2017 The Qt Company Ltd.
+** Copyright (C) 2012 Research In Motion.
 ** Contact: https://www.qt.io/licensing/
 **
 ** This file is part of the examples of the Qt Toolkit.
@@ -48,38 +48,39 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.9
-import "../Models"
-import "../Delegates"
-import "../Models/JSONListModel/CryptoApi.js" as Utils
+import QtQuick 2.0
 
-ListView {
-    property string currentCategory: ""
-    property string targetCoinName: ""
-    id: view
-    //anchors.fill: parent
-
-    clip: true
-    keyNavigationWraps: true
-    highlightMoveDuration: 0
-    focus: true
-    snapMode: ListView.NoSnap
-    currentIndex: -1 // Don't pre-select any item
-    cacheBuffer: 1000;
-    onCurrentIndexChanged: {
-        if (currentItem) {
-            view.currentCategory = model.get(currentIndex).categoryName;
+Item {
+    id: button
+    property bool buttonEnabled: true
+    width: 30
+    height: 30
+    x: 5
+    MouseArea {
+        id: mouse
+        anchors.fill: parent
+        onClicked: {
+            if (buttonEnabled)
+                buttonEnabled = false;
+            else
+                buttonEnabled = true;
         }
     }
-
-    delegate: RSSCategoriesListDelegate { }
-
-    highlight: Rectangle {
-        width: view.width
-        color: "#eeeeee"
-    }
-
-    Component.onCompleted: {
-        model.loadData();
+    Rectangle {
+        id: checkbox
+        width: 30
+        height: 30
+        border.color: "#999999"
+        border.width: 1
+        antialiasing: true
+        radius: 2
+        color: "transparent"
+        Rectangle {
+            anchors.fill: parent
+            anchors.margins: 5
+            antialiasing: true
+            radius: 1
+            color: mouse.pressed || buttonEnabled ? "#999999" : "transparent"
+        }
     }
 }

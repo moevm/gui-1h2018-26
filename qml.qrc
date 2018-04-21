@@ -1,5 +1,49 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
+        <file>Rates.qml</file>
+        <file>Converter.qml</file>
+        <file>News.qml</file>
+        <file>About.qml</file>
+        <file>CustomTabButton.qml</file>
+        <file>content/images/Asia.jpg</file>
+        <file>content/images/btn_close.png</file>
+        <file>content/images/Business.jpg</file>
+        <file>content/images/busy.png</file>
+        <file>content/images/Entertainment.jpg</file>
+        <file>content/images/Europe.jpg</file>
+        <file>content/images/Health.jpg</file>
+        <file>content/images/Politics.jpg</file>
+        <file>content/images/Science.jpg</file>
+        <file>content/images/scrollbar.png</file>
+        <file>content/images/Sports.jpg</file>
+        <file>content/images/Technology.jpg</file>
+        <file>content/images/TopStories.jpg</file>
+        <file>content/images/USNational.jpg</file>
+        <file>content/images/World.jpg</file>
+        <file>content/BusyIndicator.qml</file>
+        <file>content/CategoryDelegate.qml</file>
+        <file>content/NewsDelegate.qml</file>
+        <file>content/RssFeeds.qml</file>
+        <file>content/ScrollBar.qml</file>
+        <file>Models/JSONListModel/example.qml</file>
+        <file>Models/JSONListModel/JSONListModel.qml</file>
+        <file>Models/JSONListModel/jsonpath.js</file>
+        <file>Models/JSONListModel/CryptoApi.js</file>
+        <file>Delegates/StockListDelegate.qml</file>
+        <file>Views/StockListView.qml</file>
+        <file>Models/StockListModel.qml</file>
+        <file>StockChart.qml</file>
+        <file>StockInfo.qml</file>
+        <file>StockModel.qml</file>
+        <file>StockSettingsPanel.qml</file>
+        <file>StockView.qml</file>
+        <file>Button.qml</file>
+        <file>CheckBox.qml</file>
+        <file>Views/ExchangesView.qml</file>
+        <file>Navibutton.qml</file>
+        <file>Models/RSSCAtregoryListModel.qml</file>
+        <file>Views/RSSCategoriesView.qml</file>
+        <file>Delegates/RSSCategoriesListDelegate.qml</file>
     </qresource>
 </RCC>
