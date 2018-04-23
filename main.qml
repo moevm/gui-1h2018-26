@@ -21,9 +21,6 @@ ApplicationWindow {
             TabButton {
                 text: qsTr("News")
             }
-            TabButton {
-                text: qsTr("About")
-            }
 
             onCurrentIndexChanged: {
                 switch (currentIndex)
@@ -37,9 +34,6 @@ ApplicationWindow {
                     break;
                 case 2:
                     loader.source = "qrc:/News.qml"
-                    break;
-                case 3:
-                    loader.source = "qrc:/About.qml"
                     break;
                 }
 
