@@ -45,5 +45,6 @@
         <file>Models/RSSCAtregoryListModel.qml</file>
         <file>Views/RSSCategoriesView.qml</file>
         <file>Delegates/RSSCategoriesListDelegate.qml</file>
+        <file>Models/ConverterModel.qml</file>
     </qresource>
 </RCC>

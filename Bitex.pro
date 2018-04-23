@@ -54,4 +54,5 @@ DISTFILES += \
     StockView.qml \
     CheckBox.qml \
     Button.qml \
-    Views/ExchangesView.qml
+    Views/ExchangesView.qml \
+    Models/ConverterModel.qml

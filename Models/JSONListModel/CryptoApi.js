@@ -30,6 +30,12 @@ function getAllCoins(callback) {
     makeGetRequest(allCoinsUrl, callback);
 }
 
+function getCurrentPrice(baseCoin, targetCoin, callback){
+    var request = "https://min-api.cryptocompare.com/data/price?fsym="
+            + baseCoin + "&tsyms=" + targetCoin;
+    makeGetRequest(request, callback);
+}
+
 function getCoinInfoByHours(baseCoin, targetCoin, hours, callback){
     var request = "https://min-api.cryptocompare.com/data/histohour?fsym="
             + baseCoin + "&tsym=" + targetCoin + "&limit=" + hours;
