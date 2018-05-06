@@ -55,7 +55,7 @@ Text {
     id: menubarItem
     text: ""
     font.family: "Helvetica"
-    font.pointSize: 20
+    font.pointSize: 14
     font.weight: Font.Light
     color: "#404244"
     Layout.alignment: Qt.AlignHCenter
@@ -75,13 +75,13 @@ Text {
         State {
             name: "mouseover"
             PropertyChanges { target: menubarItem; color: "#1E90FF"; }
-            PropertyChanges { target: selectedHighlight; height: 4; }
+            PropertyChanges { target: selectedHighlight; height: 0; }
         },
         State {
             name: "selected"
             when: menubarItem.selected
             PropertyChanges { target: menubarItem; color: "#1E90FF"; }
-            PropertyChanges { target: selectedHighlight; height: 4; }
+            PropertyChanges { target: selectedHighlight; height: 0; }
         }
     ]
 

@@ -49,7 +49,7 @@
 ****************************************************************************/
 
 import QtQuick 2.9
-import QtCharts 2.1
+import QtCharts 2.2
 
 import "."
 
@@ -139,26 +139,67 @@ Item {
         }
     }
 
+    function computeCandleSeries(elements) {
+        var series = chart.createSeries(ChartView.SeriesTypeCandlestick, "wqqfqf", xAxis, yAxis);
+        series.increasingColor = 'green'
+        series.decreasingColor = 'red'
+        var result = []
+        for(var i = 0; i < elements.length; i++){
+            result.push(elements[i])
+        }
 
-    function updateStock(elements, title) {
-        chart.removeAllSeries();
-        computeMovingAverage(elements);
-        xAxis.tickCount = 5;
-        yAxis.max = findMax(elements, "open");
-        xAxis.max = fromMillesecondsToDate(findMax(elements, "time") * 1000);
-        yAxis.min = findMin(elements, "open", yAxis.max);
-        xAxis.min = fromMillesecondsToDate( findMin(elements, "time", xAxis.max) * 1000);
-        xAxis.format = setAxesFormat(title);
+        for(var index in result)
+        {
+            var comlp = Qt.createQmlObject("import QtQuick 2.9; import QtCharts 2.2; CandlestickSet { timestamp: 1435708800000; open: 690; high: 694; low: 599; close: 660 }", root)
+            var date = result[index]["time"] * 1000;
+            var close = result[index]["close"];
+            var high = result[index]["high"];
+            var low = result[index]["low"];
+            var open = result[index]["open"];
+            var rofl = comlp
+            rofl.close = close
+            rofl.high = high
+            rofl.low = low
+            rofl.open = open
+            rofl.timestamp = date
+            series.append(rofl);
+        }
+    }
+
+    function computeOrdinaryLine(elements){
         var series = chart.createSeries(ChartView.SeriesTypeLine, "Stock", xAxis, yAxis);
         series.pointsVisible = true;
         series.color = Qt.rgba(0, 0, 1, 1);
         for(var index in elements)
         {
             var date = elements[index]["time"] * 1000;
-            var open = elements[index]["open"];
+            var open = computeAverage(elements[index])//elements[index]["open"];
             series.append(date, open);
         }
         series.pointsVisible = true;
+    }
+
+    function computeAverage(element){
+        return (element["open"] + element["close"] + element["high"] + element["low"]) / 4
+    }
+
+    function updateStock(elements, title, open, movingAverage, candlestick) {
+        chart.removeAllSeries();
+        if(movingAverage)
+            computeMovingAverage(elements);
+        if(candlestick)
+            computeCandleSeries(elements);
+        if(open)
+            computeOrdinaryLine(elements);
+        xAxis.tickCount = 5;
+        yAxis.max = findMax(elements, "high");
+        yAxis.max = yAxis.max * 1.01
+        var timeDelta = (elements[1]["time"] - elements[0]["time"]) * 1000
+        xAxis.max = fromMillesecondsToDate(findMax(elements, "time") * 1000 + timeDelta);
+        yAxis.min = findMin(elements, "low", yAxis.max);
+        yAxis.min = yAxis.min * 0.99
+        xAxis.min = fromMillesecondsToDate( findMin(elements, "time", xAxis.max) * 1000 - timeDelta);
+        xAxis.format = setAxesFormat(title);
         chart.title = title;
     }
 
