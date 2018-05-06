@@ -46,5 +46,6 @@
         <file>Views/RSSCategoriesView.qml</file>
         <file>Delegates/RSSCategoriesListDelegate.qml</file>
         <file>Models/ConverterModel.qml</file>
+        <file>Wallet.qml</file>
     </qresource>
 </RCC>

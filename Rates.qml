@@ -31,84 +31,147 @@ Item {
 
             Rectangle {
                 id: menuBar
-                height: 52
+                height: 100
                 color: "#000000"
-                RowLayout {
-                    spacing: 28
-                    anchors.left: parent.left
-                    anchors.top: parent.top
-                    anchors.leftMargin: 10
-                    Text {
-                        id: timeSpan
-                        color: "#000000"
-                        font.pointSize: 14
-                        //font.weight: Font.Bold
-                        verticalAlignment: Text.AlignVCenter
-                        maximumLineCount: 1
-                        text: "Time span:"
-                        wrapMode: Text.Wrap
-                        //anchors.margins: 10
+
+                ColumnLayout {
+                    id: columnLayout
+                    width: 100
+                    height: 100
+                    spacing: 7
+
+                    RowLayout {
+                        spacing: 28
+                        Layout.margins: 5
+                        property int buttonSize: 16
+                        Text {
+                            id: timeSpan
+                            color: "#000000"
+                            font.pointSize: 12
+                            //font.weight: Font.Bold
+                            verticalAlignment: Text.AlignVCenter
+                            maximumLineCount: 1
+                            text: "Time span:"
+                            wrapMode: Text.Wrap
+                        }
+
+                        Navibutton {
+                            id: page1Button
+                            text: "6 H"
+                            stateSelect: "6 H"
+                            stateTarget: targetorto
+                            selected: true
+                            Layout.minimumHeight: parent.buttonSize
+                            Layout.preferredHeight: parent.buttonSize
+                            Layout.maximumHeight: parent.buttonSize
+                        }
+
+                        Navibutton {
+                            id: page2Button
+                            text: "1 D"
+                            stateSelect: "1 D"
+                            stateTarget: targetorto
+                            Layout.minimumHeight:parent.buttonSize
+                            Layout.preferredHeight: parent.buttonSize
+                            Layout.maximumHeight: parent.buttonSize
+                        }
+
+                        Navibutton {
+                            id: page3Button
+                            text: "7 D"
+                            stateSelect: "7 D"
+                            stateTarget: targetorto
+                            Layout.minimumHeight:parent.buttonSize
+                            Layout.preferredHeight: parent.buttonSize
+                            Layout.maximumHeight: parent.buttonSize
+                        }
+
+                        Navibutton {
+                            id: page4Button
+                            text: "30 D"
+                            stateSelect: "30 D"
+                            stateTarget: targetorto
+                            Layout.minimumHeight:parent.buttonSize
+                            Layout.preferredHeight: parent.buttonSize
+                            Layout.maximumHeight: parent.buttonSize
+                        }
+
+                        Navibutton {
+                            id: page5Button
+                            text: "6 M"
+                            stateSelect: "6 M"
+                            stateTarget: targetorto
+                            Layout.minimumHeight:parent.buttonSize
+                            Layout.preferredHeight: parent.buttonSize
+                            Layout.maximumHeight: parent.buttonSize
+                        }
+
+                        Navibutton {
+                            id: page6Button
+                            text: "1 Y"
+                            stateTarget: targetorto
+                            stateSelect: "1 Y"
+                            Layout.minimumHeight:parent.buttonSize
+                            Layout.preferredHeight: parent.buttonSize
+                            Layout.maximumHeight: parent.buttonSize
+                        }
                     }
 
-                    Navibutton {
-                        id: page1Button
-                        text: "6 H"
-                        stateSelect: "6 H"
-                        stateTarget: targetorto
-                        selected: true
-                        Layout.minimumHeight:52
-                        Layout.preferredHeight: 52
-                        Layout.maximumHeight: 52
-                    }
+                    RowLayout {
+                        spacing: 10
+                        Layout.margins: 5
+                        property int buttonSize: 12
+                        id: rofl
+                        Text {
+                            id: timeSpan1
+                            color: "#000000"
+                            text: "Average"
+                            font.pointSize: 12
+                            maximumLineCount: 1
+                            verticalAlignment: Text.AlignVCenter
+                            wrapMode: Text.Wrap
+                        }
 
-                    Navibutton {
-                        id: page2Button
-                        text: "1 D"
-                        stateSelect: "1 D"
-                        stateTarget: targetorto
-                        Layout.minimumHeight:52
-                        Layout.preferredHeight: 52
-                        Layout.maximumHeight: 52
-                    }
+                        Switch {
+                            id: averageSwitch
+                            Layout.minimumHeight: parent.buttonSize
+                            Layout.preferredHeight: parent.buttonSize
+                            Layout.maximumHeight: parent.buttonSize
+                        }
 
-                    Navibutton {
-                        id: page3Button
-                        text: "7 D"
-                        stateSelect: "7 D"
-                        stateTarget: targetorto
-                        Layout.minimumHeight:52
-                        Layout.preferredHeight: 52
-                        Layout.maximumHeight: 52
-                    }
+                        Text {
+                            id: timeSpan2
+                            color: "#000000"
+                            text: "Moving Average"
+                            font.pointSize: 12
+                            maximumLineCount: 1
+                            verticalAlignment: Text.AlignVCenter
+                            wrapMode: Text.Wrap
+                        }
 
-                    Navibutton {
-                        id: page4Button
-                        text: "30 D"
-                        stateSelect: "30 D"
-                        stateTarget: targetorto
-                        Layout.minimumHeight:52
-                        Layout.preferredHeight: 52
-                        Layout.maximumHeight: 52
-                    }
+                        Switch {
+                            id: movingAverageSwitch
+                            Layout.minimumHeight: parent.buttonSize
+                            Layout.preferredHeight: parent.buttonSize
+                            Layout.maximumHeight: parent.buttonSize
+                        }
 
-                    Navibutton {
-                        id: page5Button
-                        text: "6 M"
-                        stateSelect: "6 M"
-                        stateTarget: targetorto
-                        Layout.minimumHeight:52
-                        Layout.preferredHeight: 52
-                        Layout.maximumHeight: 52
-                    }
+                        Text {
+                            id: timeSpan3
+                            color: "#000000"
+                            text: "Candlestick"
+                            font.pointSize: 12
+                            maximumLineCount: 1
+                            verticalAlignment: Text.AlignVCenter
+                            wrapMode: Text.Wrap
+                        }
 
-                    Navibutton {
-                        id: page6Button
-                        text: "1 Y"
-                        stateTarget: targetorto
-                        stateSelect: "1 Y"
-                        Layout.minimumHeight:52
-                        Layout.preferredHeight: 52
-                        Layout.maximumHeight: 52
+                        Switch {
+                            id: candlestickSwitch
+                            Layout.minimumHeight: parent.buttonSize
+                            Layout.preferredHeight: parent.buttonSize
+                            Layout.maximumHeight: parent.buttonSize
+                        }
                     }
                 }
             }
@@ -136,6 +199,14 @@ Item {
         targetCoinName: stockListView.targetCoinName
         timeSpan: targetorto.state
 
+        property bool average: averageSwitch.checked
+        property bool movingAverage: movingAverageSwitch.checked
+        property bool candlestick: candlestickSwitch.checked
+
+        onAverageChanged: updateChart()
+        onMovingAverageChanged: updateChart()
+        onCandlestickChanged: updateChart()
+
         onCoinNameChanged: {
             //exchages.update();
             stock.updateStock();
@@ -146,12 +217,16 @@ Item {
         }
 
         onDataReady: {
-            chart.updateStock(stock.stocks, stock.title);
-            chart.update();
+            updateChart()
         }
 
         onTimeSpanChanged: {
             stock.updateStock();
+        }
+
+        function updateChart(){
+            chart.updateStock(stock.stocks, stock.title, average, movingAverage, candlestick);
+            chart.update();
         }
     }
 

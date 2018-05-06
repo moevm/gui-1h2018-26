@@ -6,7 +6,7 @@ import QtQuick.Layouts 1.3
 
 ApplicationWindow {
     visible: true
-    width: 1000
+    width: 1200
     height: 600
     title: qsTr("Bitex")
 
